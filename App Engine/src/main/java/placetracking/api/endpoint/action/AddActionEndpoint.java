@@ -1,4 +1,4 @@
-package placetracking.api.endpoint.user;
+package placetracking.api.endpoint.action;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,48 +7,55 @@ import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
 import placetracking.api.endpoint.Endpoint;
 import placetracking.api.endpoint.EndpointManager;
+import placetracking.datastore.model.Action;
 import placetracking.datastore.model.Topic;
 import placetracking.datastore.model.User;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 
-public class AddUserEndpoint extends Endpoint {
+public class AddActionEndpoint extends Endpoint {
 	
 	@Override
 	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_USERS_ADD;
+		return EndpointManager.ENDPOINT_ACTIONS_ADD;
 	}
 
 	@Override
 	public List<String> getRequiredParameters(WebsiteRequest request) {
 		List<String> params = super.getRequiredParameters(request);
 		params.add("name");
+		params.add("userId");
+		params.add("topicId");
 		return params;
 	}
 	
 	@Override
 	public ApiResponse generateRequestResponse(WebsiteRequest request) throws Exception {
 		ApiResponse response = new ApiResponse();
-		List<User> results = getRequestResponseEntries(request);
+		List<Action> results = getRequestResponseEntries(request);
 		response.setContent(results);
 		return response;
 	}
 	
-	public static List<User> getRequestResponseEntries(WebsiteRequest request) throws Exception {
+	public static List<Action> getRequestResponseEntries(WebsiteRequest request) throws Exception {
 		String name = request.getParameter("name");
+		long userId = request.getParameterAsLong("userId", -1);
+		long topicId = request.getParameterAsLong("topicId", -1);
 		
-		User user = new User(name);
+		Action action = new Action(name)
+				.byUser(userId)
+				.onTopic(topicId);
 		
-		Key<User> key = ObjectifyService.ofy()
+		Key<Action> key = ObjectifyService.ofy()
                 .save()
-                .entity(user)
+                .entity(action)
                 .now();
 		
-		List<User> results = new ArrayList<User>();
-		results.add(user);
+		List<Action> results = new ArrayList<Action>();
+		results.add(action);
 		
-		log.info("Added a new user with name: " + name + " and id: " + user.getId());
+		log.info("Added a new action with name: " + name + " and id: " + action.getId());
 		return results;
 	}
 	

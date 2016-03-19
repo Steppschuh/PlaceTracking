@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import placetracking.WebsiteRequest;
+import placetracking.api.endpoint.action.AddActionEndpoint;
+import placetracking.api.endpoint.action.DeleteActionEndpoint;
+import placetracking.api.endpoint.action.GetActionEndpoint;
 import placetracking.api.endpoint.topic.AddTopicEndpoint;
 import placetracking.api.endpoint.topic.GetTopicEndpoint;
 import placetracking.api.endpoint.user.AddUserEndpoint;
@@ -20,10 +23,15 @@ public final class EndpointManager {
     public static final String ENDPOINT_TOPICS_GET = ENDPOINT_TOPICS + "get/";
     public static final String ENDPOINT_TOPICS_ADD = ENDPOINT_TOPICS + "add/";
     
-    public static final String ENDPOINT_USER = ENDPOINT_API + "user/";
-    public static final String ENDPOINT_USER_GET = ENDPOINT_USER + "get/";
-    public static final String ENDPOINT_USER_ADD = ENDPOINT_USER + "add/";
-	
+    public static final String ENDPOINT_USERS = ENDPOINT_API + "users/";
+    public static final String ENDPOINT_USERS_GET = ENDPOINT_USERS + "get/";
+    public static final String ENDPOINT_USERS_ADD = ENDPOINT_USERS + "add/";
+    
+    public static final String ENDPOINT_ACTIONS = ENDPOINT_API + "actions/";
+    public static final String ENDPOINT_ACTIONS_GET = ENDPOINT_ACTIONS + "get/";
+    public static final String ENDPOINT_ACTIONS_ADD = ENDPOINT_ACTIONS + "add/";
+    public static final String ENDPOINT_ACTIONS_DELETE = ENDPOINT_ACTIONS + "delete/";
+    
     public static final List<Endpoint> endpoints = getAvailableEndpoints();
     
     private EndpointManager() {
@@ -36,6 +44,9 @@ public final class EndpointManager {
     	endpoints.add(new AddTopicEndpoint());
     	endpoints.add(new GetUserEndpoint());
     	endpoints.add(new AddUserEndpoint());
+    	endpoints.add(new GetActionEndpoint());
+    	endpoints.add(new AddActionEndpoint());
+    	endpoints.add(new DeleteActionEndpoint());
     	return endpoints;
     }
 	

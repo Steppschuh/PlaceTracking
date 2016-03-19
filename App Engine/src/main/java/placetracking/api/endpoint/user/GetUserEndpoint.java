@@ -16,7 +16,7 @@ public class GetUserEndpoint extends Endpoint {
 	
 	@Override
 	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_USER_GET;
+		return EndpointManager.ENDPOINT_USERS_GET;
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class GetUserEndpoint extends Endpoint {
 			results = getUserById(id);
 		}
 		
-		log.info("Found " + results.size() + " user");
+		log.info("Found " + results.size() + " user(s)");
 		return results;
 	}
 	
