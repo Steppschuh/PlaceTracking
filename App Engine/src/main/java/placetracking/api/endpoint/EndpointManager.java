@@ -15,7 +15,7 @@ import placetracking.api.endpoint.user.GetUserEndpoint;
 public final class EndpointManager {
     
     public static final String HOST_LOCAL_DEV_SERVER = "localhost:8888";
-	public static final String HOST_APP_ENGINE = "placetracking.appspot.com/";
+	public static final String HOST_APP_ENGINE = "placetracking.appspot.com";
     
     public static final String ENDPOINT_API = "api/";
 

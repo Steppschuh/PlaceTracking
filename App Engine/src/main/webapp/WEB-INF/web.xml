@@ -18,28 +18,34 @@
         <listener-class>placetracking.datastore.OfyHelper</listener-class>
     </listener>
 
-    <!-- Demo Servlet -->
+	<!-- Root Filter -->
+    <filter>
+        <filter-name>RootFilter</filter-name>
+        <filter-class>placetracking.RootFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RootFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <!-- Root Servlet -->
     <servlet>
-        <servlet-name>demo</servlet-name>
-        <servlet-class>placetracking.DemoServlet</servlet-class>
+        <servlet-name>RootServlet</servlet-name>
+        <servlet-class>placetracking.RootServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>demo</servlet-name>
-        <url-pattern>/demo</url-pattern>
+        <servlet-name>RootServlet</servlet-name>
+        <url-pattern>/root/*</url-pattern>
     </servlet-mapping>
 
 	<!-- API Servlet -->
     <servlet>
-        <servlet-name>api</servlet-name>
+        <servlet-name>ApiServlet</servlet-name>
         <servlet-class>placetracking.api.ApiServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>api</servlet-name>
-        <url-pattern>/api/*</url-pattern>
+        <servlet-name>ApiServlet</servlet-name>
+        <url-pattern>/root/api/*</url-pattern>
     </servlet-mapping>
-
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
 
 </web-app>
