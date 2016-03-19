@@ -28,6 +28,16 @@
         <url-pattern>/demo</url-pattern>
     </servlet-mapping>
 
+	<!-- API Servlet -->
+    <servlet>
+        <servlet-name>api</servlet-name>
+        <servlet-class>placetracking.api.ApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>api</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    
     <!-- Topic Servlet -->
     <servlet>
         <servlet-name>topic</servlet-name>
