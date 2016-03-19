@@ -5,16 +5,16 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 
 @Entity
-public class Topic {
+public class User {
 
     @Id private Long id;
 
     @Index private String name;
 
-    public Topic() {
+    public User() {
     }
 
-    public Topic(String name) {
+    public User(String name) {
         this();
         this.name = name;
     }

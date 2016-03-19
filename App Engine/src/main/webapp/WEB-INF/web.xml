@@ -37,16 +37,6 @@
         <servlet-name>api</servlet-name>
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
-    
-    <!-- Topic Servlet -->
-    <servlet>
-        <servlet-name>topic</servlet-name>
-        <servlet-class>placetracking.TopicServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>topic</servlet-name>
-        <url-pattern>/topic</url-pattern>
-    </servlet-mapping>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

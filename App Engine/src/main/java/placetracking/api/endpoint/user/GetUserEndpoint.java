@@ -1,4 +1,4 @@
-package placetracking.api.endpoint.topic;
+package placetracking.api.endpoint.user;
 
 import java.util.List;
 
@@ -7,49 +7,48 @@ import placetracking.api.ApiResponse;
 import placetracking.api.endpoint.Endpoint;
 import placetracking.api.endpoint.EndpointManager;
 import placetracking.datastore.model.Topic;
+import placetracking.datastore.model.User;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 
-public class GetTopicsEndpoint extends Endpoint {
+public class GetUserEndpoint extends Endpoint {
 	
 	@Override
 	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_TOPICS_GET;
+		return EndpointManager.ENDPOINT_USER_GET;
 	}
 	
 	@Override
 	public ApiResponse generateRequestResponse(WebsiteRequest request) throws Exception {
 		ApiResponse response = new ApiResponse();
-		List<Topic> results = getRequestResponseEntries(request);
+		List<User> results = getRequestResponseEntries(request);
 		response.setContent(results);
 		return response;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static List<Topic> getRequestResponseEntries(WebsiteRequest request) throws Exception {
+	public static List<User> getRequestResponseEntries(WebsiteRequest request) throws Exception {
 		String name = request.getParameter("name");
 		long id = request.getParameterAsLong("id", -1);
 		
-		List<Topic> results;
+		List<User> results;
 		if (name != null) {
-			results = getTopicsByName(name, request);
+			results = getUsersByName(name, request);
 		} else {
-			results = getTopicsById(id);
+			results = getUserById(id);
 		}
 		
-		
-		log.info("Found " + results.size() + " topic(s)");
+		log.info("Found " + results.size() + " user");
 		return results;
 	}
 	
-	public static List<Topic> getTopicsByName(String name, WebsiteRequest request) {
+	public static List<User> getUsersByName(String name, WebsiteRequest request) {
 		int offset = request.getParameterAsInt("offset", 0);
 		int limit = request.getParameterAsInt("limit", 25);
 		
-		List<Topic> results = ObjectifyService.ofy()
+		List<User> results = ObjectifyService.ofy()
                 .load()
-                .type(Topic.class)
+                .type(User.class)
                 .limit(limit)
                 .offset(offset)
                 .filter("name", name)
@@ -58,11 +57,11 @@ public class GetTopicsEndpoint extends Endpoint {
 		return results;
 	}
 	
-	public static List<Topic> getTopicsById(long id) {
-		Key<Topic> key = Key.create(Topic.class, id);
-		List<Topic> results = ObjectifyService.ofy()
+	public static List<User> getUserById(long id) {
+		Key<User> key = Key.create(User.class, id);
+		List<User> results = ObjectifyService.ofy()
                 .load()
-                .type(Topic.class)
+                .type(User.class)
                 .filterKey(key)
                 .list();
 		

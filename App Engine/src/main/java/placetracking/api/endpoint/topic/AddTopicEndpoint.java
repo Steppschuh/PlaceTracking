@@ -12,7 +12,7 @@ import placetracking.datastore.model.Topic;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 
-public class AddTopicsEndpoint extends Endpoint {
+public class AddTopicEndpoint extends Endpoint {
 	
 	@Override
 	public String getEndpointPath() {
@@ -34,7 +34,6 @@ public class AddTopicsEndpoint extends Endpoint {
 		return response;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public static List<Topic> getRequestResponseEntries(WebsiteRequest request) throws Exception {
 		String name = request.getParameter("name");
 		
@@ -48,7 +47,7 @@ public class AddTopicsEndpoint extends Endpoint {
 		List<Topic> results = new ArrayList<Topic>();
 		results.add(topic);
 		
-		log.info("Added a new topic with name: " + name + " and id: " + topic.id);
+		log.info("Added a new topic with name: " + name + " and id: " + topic.getId());
 		return results;
 	}
 	
