@@ -1,1 +1,4 @@
-myapp/DemoServlet.class
+placetracking/datastore/OfyHelper.class
+placetracking/TopicServlet.class
+placetracking/datastore/model/Topic.class
+placetracking/DemoServlet.class
