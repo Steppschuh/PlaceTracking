@@ -1,7 +1,33 @@
 # PlaceTracking
-Simple and free to use API for time / location / whatever tracking.
+Simple and free to use JSON API for time / location / whatever tracking.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/434707094bd26e283ffc)
+
+
+## Example Usage
+### Time Tracking
+The most obvious use case is logging how much time you've spent on a project:
+
+1. Create a User ("Your Name")
+2. Create a Topic ("Project Name")
+3. Add an action each time you start working ("start")
+4. Add an action each time you stop working ("stop")
+
+You can use the collected data to analyse how much time you (or your team) spent on the project.
+
+### Location Tracking
+You can also use the API to track when you arrive at or leave a location (for example the gym or your office):
+
+1. Create a User ("Your Name")
+2. Create a Topic ("Location Name")
+3. Add an action each time you arrive ("arrive")
+4. Add an action each time you leave ("leave")
+
+You can use the collected data to check who's currently at the office or when you've been at the gym recently.
+
+### IFTTT Automatization
+Of course you don't want to manually call this API every time. You can automatically trigger actions using [IFTTT](https://ifttt.com/). I'd suggest using the [Maker channel](https://ifttt.com/maker), it allows you to fire web requests to this API. You could use the [Location channel](https://ifttt.com/android_location) as a trigger when you arrive at or leave a location.
+
 
 ## Available API endpoints
 All the API endpoints listed below are reachable at:
