@@ -28,7 +28,7 @@ You can also use the API to track when you arrive at or leave a location (for ex
 You can use the collected data to check who's currently at the office or when you've been at the gym recently.
 
 ### IFTTT Automatization
-Of course you don't want to manually call this API every time. You can automatically trigger actions using [IFTTT](https://ifttt.com/). I'd suggest using the [Maker channel](https://ifttt.com/maker), it allows you to fire web requests to this API. You could use the [Location channel](https://ifttt.com/android_location) as a trigger when you arrive at or leave a location.
+Of course you don't want to manually call this API every time. You can automatically trigger actions using [IFTTT](https://ifttt.com/). I'd suggest using the [Maker channel](https://ifttt.com/maker), it allows you to fire web requests to this API. You could use the [Location channel](https://ifttt.com/android_location) as a trigger when you arrive at or leave a location. Here are two pre-configured recipes based on your WiFi network: [start tracking](https://ifttt.com/recipes/399028-start-time-tracking-when-you-connect-with-the-office-wifi) and [stop tracking](https://ifttt.com/recipes/399029-stop-time-tracking-when-you-disconnect-from-the-office-wifi).
 
 
 ## Available API endpoints
