@@ -1,5 +1,5 @@
 # PlaceTracking
-Simple and free to use JSON API for time / location / whatever tracking.
+Simple and free to use JSON API for time / location / whatever tracking. Follow [this guide](http://random-how-to.com/free-automated-time-tracking/) to learn how to set this up as automated time tracking solution.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/434707094bd26e283ffc)
 
