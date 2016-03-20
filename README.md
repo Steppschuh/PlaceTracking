@@ -52,7 +52,7 @@ Make sure that you store the **id** of the returned topic object, you will need 
 
 ### Actions
 #### Adding an action
-An action can bee seen as an event or indicator for a topic. You can create a new topic by providing a **name**, your **userId** and a **topicId**:
+An action can bee seen as an event or indicator for a topic. You can create a new action by providing a **name**, your **userId** and a **topicId**:
 ```
 /api/actions/add/?name=start&userId=5629499534213120&topicId=5707702298738688
 ```
