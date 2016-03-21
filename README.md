@@ -1,5 +1,5 @@
 # PlaceTracking
-Simple and free to use JSON API for time / location / whatever tracking.
+Simple and free to use JSON API for time / location / whatever tracking. Feel free to discuss on [xda-developers](http://forum.xda-developers.com/tools/general/tool-free-time-location-tracking-api-t3341898).
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/434707094bd26e283ffc)
 
