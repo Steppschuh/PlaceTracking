@@ -4,6 +4,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import placetracking.datastore.model.Action;
+import placetracking.datastore.model.Relation;
 import placetracking.datastore.model.Topic;
 import placetracking.datastore.model.User;
 
@@ -17,6 +18,7 @@ public class OfyHelper implements ServletContextListener {
         ObjectifyService.register(Topic.class);
         ObjectifyService.register(User.class);
         ObjectifyService.register(Action.class);
+        ObjectifyService.register(Relation.class);
     }
 
     public void contextDestroyed(ServletContextEvent event) {

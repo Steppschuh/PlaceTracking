@@ -18,7 +18,7 @@ public class User {
         this();
         this.name = name;
     }
-
+    
 	public Long getId() {
 		return id;
 	}

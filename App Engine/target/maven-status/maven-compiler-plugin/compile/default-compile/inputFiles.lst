@@ -10,10 +10,13 @@
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/RootFilter.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/AddActionEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/topic/AddTopicEndpoint.java
+/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/relation/GetRelationsEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/RootServlet.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/GetActionEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/user/AddUserEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/WebsiteRequest.java
+/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/datastore/model/Relation.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/DeleteActionEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/Endpoint.java
+/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/relation/AddRelationEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/datastore/model/User.java

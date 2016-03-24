@@ -7,12 +7,15 @@ import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
 import placetracking.api.endpoint.Endpoint;
 import placetracking.api.endpoint.EndpointManager;
+import placetracking.api.endpoint.relation.AddRelationEndpoint;
 import placetracking.datastore.model.Action;
+import placetracking.datastore.model.Relation;
 import placetracking.datastore.model.Topic;
 import placetracking.datastore.model.User;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.cmd.Query;
 
 public class AddActionEndpoint extends Endpoint {
 	
@@ -43,6 +46,10 @@ public class AddActionEndpoint extends Endpoint {
 		long userId = request.getParameterAsLong("userId", -1);
 		long topicId = request.getParameterAsLong("topicId", -1);
 		
+		// add a relation for the user to the topic, if not already set
+		AddRelationEndpoint.addRelationIfNotYetSet(userId, topicId);
+		
+		// add the new action
 		Action action = new Action(name)
 				.byUser(userId)
 				.onTopic(topicId);

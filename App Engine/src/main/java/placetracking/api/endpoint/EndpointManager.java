@@ -7,6 +7,8 @@ import placetracking.WebsiteRequest;
 import placetracking.api.endpoint.action.AddActionEndpoint;
 import placetracking.api.endpoint.action.DeleteActionEndpoint;
 import placetracking.api.endpoint.action.GetActionEndpoint;
+import placetracking.api.endpoint.relation.AddRelationEndpoint;
+import placetracking.api.endpoint.relation.GetRelationsEndpoint;
 import placetracking.api.endpoint.topic.AddTopicEndpoint;
 import placetracking.api.endpoint.topic.GetTopicEndpoint;
 import placetracking.api.endpoint.user.AddUserEndpoint;
@@ -32,6 +34,10 @@ public final class EndpointManager {
     public static final String ENDPOINT_ACTIONS_ADD = ENDPOINT_ACTIONS + "add/";
     public static final String ENDPOINT_ACTIONS_DELETE = ENDPOINT_ACTIONS + "delete/";
     
+    public static final String ENDPOINT_RELATIONS = ENDPOINT_API + "relations/";
+    public static final String ENDPOINT_RELATIONS_GET = ENDPOINT_RELATIONS + "get/";
+    public static final String ENDPOINT_RELATIONS_ADD = ENDPOINT_RELATIONS + "add/";
+    
     public static final List<Endpoint> endpoints = getAvailableEndpoints();
     
     private EndpointManager() {
@@ -47,6 +53,8 @@ public final class EndpointManager {
     	endpoints.add(new GetActionEndpoint());
     	endpoints.add(new AddActionEndpoint());
     	endpoints.add(new DeleteActionEndpoint());
+    	endpoints.add(new GetRelationsEndpoint());
+    	endpoints.add(new AddRelationEndpoint());
     	return endpoints;
     }
 	
