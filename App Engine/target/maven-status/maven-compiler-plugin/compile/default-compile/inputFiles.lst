@@ -6,6 +6,7 @@
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/topic/GetTopicEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/datastore/model/Topic.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/ApiResponse.java
+/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/reporting/ReportingEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/EndpointManager.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/RootFilter.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/AddActionEndpoint.java

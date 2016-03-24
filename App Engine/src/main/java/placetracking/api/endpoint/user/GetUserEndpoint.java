@@ -1,11 +1,14 @@
 package placetracking.api.endpoint.user;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
 import placetracking.api.endpoint.Endpoint;
 import placetracking.api.endpoint.EndpointManager;
+import placetracking.api.endpoint.relation.GetRelationsEndpoint;
+import placetracking.datastore.model.Relation;
 import placetracking.datastore.model.Topic;
 import placetracking.datastore.model.User;
 
@@ -28,13 +31,13 @@ public class GetUserEndpoint extends Endpoint {
 	}
 	
 	public static List<User> getRequestResponseEntries(WebsiteRequest request) throws Exception {
-		String name = request.getParameter("name");
 		long id = request.getParameterAsLong("id", -1);
+		long topicId = request.getParameterAsLong("topicId", -1);
 		
-		List<User> results;
-		if (name != null) {
-			results = getUsersByName(name, request);
-		} else {
+		List<User> results = new ArrayList<User>();
+		if (topicId > -1) {
+			results = getUsersByTopicId(topicId, request);
+		} else if (id > -1) {
 			results = getUserById(id);
 		}
 		
@@ -66,6 +69,43 @@ public class GetUserEndpoint extends Endpoint {
                 .list();
 		
 		return results;
+	}
+	
+	public static List<User> getUsersByTopicId(long topicId, WebsiteRequest request) {
+		List<Long> userIds = getUserIdsByTopicId(topicId, request);
+		List<User> users = new ArrayList<User>();
+		
+		for (Long userId : userIds) {
+			List<User> macthingUsers = getUserById(userId);
+			if (macthingUsers.size() > 0) {
+				users.add(macthingUsers.get(0));
+			}
+		}
+		
+		return users;
+	}
+	
+	public static List<Long> getUserIdsByTopicId(long topicId, WebsiteRequest request) {
+		List<Long> userIds = new ArrayList<Long>();
+		
+		try {
+			WebsiteRequest relationsRequest = new WebsiteRequest(request.getServletRequest());
+			relationsRequest.setAttribute("topicId", topicId);
+			
+			List<Relation> relations = GetRelationsEndpoint.getRelationsWithFilters(relationsRequest);
+			for (Relation relation : relations) {
+				if (!userIds.contains(relation.getUserId())) {
+					userIds.add(relation.getUserId());
+				}
+			}
+			
+			log.info("Found " + userIds.size() + " user(s) related to topic with id: " + topicId);
+		} catch (Exception e) {
+			log.warning("Unable to get userIds by topicId: " + topicId);
+			e.printStackTrace();
+		}
+		
+		return userIds;
 	}
 	
 }
