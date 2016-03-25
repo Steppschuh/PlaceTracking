@@ -8,7 +8,7 @@ import javax.cache.Cache;
 import javax.servlet.http.HttpServletResponse;
 
 import placetracking.WebsiteRequest;
-import placetracking.util.SlackPayload;
+import placetracking.util.slack.SlackPayload;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

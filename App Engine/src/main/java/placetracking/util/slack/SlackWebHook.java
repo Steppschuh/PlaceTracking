@@ -1,9 +1,5 @@
-package placetracking.util;
+package placetracking.util.slack;
 
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.HashMap;
 
 import com.google.appengine.repackaged.com.google.api.client.http.GenericUrl;

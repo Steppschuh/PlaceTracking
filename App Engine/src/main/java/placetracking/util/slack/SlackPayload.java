@@ -1,4 +1,4 @@
-package placetracking.util;
+package placetracking.util.slack;
 
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;

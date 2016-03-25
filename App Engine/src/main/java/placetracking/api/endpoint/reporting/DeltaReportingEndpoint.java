@@ -1,8 +1,11 @@
 package placetracking.api.endpoint.reporting;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import placetracking.WebsiteRequest;
@@ -37,41 +40,48 @@ public class DeltaReportingEndpoint extends Endpoint {
 		
 		boolean readable = request.getParameterAsBoolean("readable", false);
 		boolean detailed = request.getParameterAsBoolean("detailed", false);
+		boolean chart = request.getParameterAsBoolean("chart", false);
 		
-		long delta = getDeltaBetweenActionTimestamps(request);
-		if (readable) {
-			String response;
-			if (detailed) {
-				response = getReadableDetailedDeltaByTopic(request);
-			} else {
-				response = getReadableDeltaByTopic(request);
+		String response;
+		if (detailed) {
+			Map<User, Long> deltas = getDetailedDeltaByTopic(request);
+			if (readable) {
+				response = getDetailedDeltaByTopicAsReadableText(deltas);
+				results.add(response);
 			}
-			log.info(response);
-			results.add(response);
+			if (chart) {
+				String chartUrl = getDetailedDeltaByTopicAsPieChartUrl(deltas);
+				results.add(chartUrl);
+			}
 		} else {
-			results.add(delta);
+			if (readable) {
+				response = getDeltaByTopicAsReadableText(request);
+				results.add(response);
+			} else {
+				long delta = getDeltaBetweenActionTimestamps(request);
+				results.add(delta);
+			}
 		}
 		
 		return results;
 	}
 	
-	public static String getReadableDeltaByTopic(WebsiteRequest request) throws Exception {
+	public static String getDeltaByTopicAsReadableText(WebsiteRequest request) throws Exception {
 		long delta = getDeltaBetweenActionTimestamps(request);
 		String response = StringUtils.millisToReadableTime(delta);
 		return response;
 	}
 	
-	public static String getReadableDetailedDeltaByTopic(WebsiteRequest request) throws Exception {
-		long topicId = request.getParameterAsLong("topicId", -1);
-		List<User> users = GetUserEndpoint.getUsersByTopicId(topicId, request);
-		
+	public static String getDetailedDeltaByTopicAsReadableText(WebsiteRequest request) throws Exception {
+		Map<User, Long> deltas = getDetailedDeltaByTopic(request);
+		return getDetailedDeltaByTopicAsReadableText(deltas);
+	}
+	
+	public static String getDetailedDeltaByTopicAsReadableText(Map<User, Long> deltas) throws Exception {
 		StringBuilder sb = new StringBuilder();
-		for (User user : users) {
-			WebsiteRequest deltaRequest = new WebsiteRequest(request.getServletRequest());
-			deltaRequest.addParameter("userId", String.valueOf(user.getId()));
-			
-			long delta = getDeltaBetweenActionTimestamps(deltaRequest);
-			String readableTime = StringUtils.millisToReadableTime(delta);
+		for (Map.Entry<User, Long> delta : deltas.entrySet()) {
+		    User user = delta.getKey();
+			String readableTime = StringUtils.millisToReadableTime(delta.getValue());
 			
 			if (sb.length() > 0) {
 				sb.append("\r\n");
@@ -79,8 +89,38 @@ public class DeltaReportingEndpoint extends Endpoint {
 			sb.append(user.getName() + ": ");
 			sb.append(readableTime);
 		}
-		
 		return sb.toString();
+	}
+	
+	public static String getDetailedDeltaByTopicAsPieChartUrl(Map<User, Long> deltas) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		sb.append("http://chartspree.io/pie.svg?_style=light&_height=300px&_width=600px");
+		for (Map.Entry<User, Long> delta : deltas.entrySet()) {
+		    User user = delta.getKey();
+			long miniutes = TimeUnit.MILLISECONDS.toMinutes(delta.getValue());
+			
+			String parameter = URLEncoder.encode(user.getName(), "UTF-8") + "=" + miniutes;
+			
+			sb.append("&");
+			sb.append(parameter);
+		}
+		return sb.toString();
+	}
+	
+	public static Map<User, Long> getDetailedDeltaByTopic(WebsiteRequest request) throws Exception {
+		long topicId = request.getParameterAsLong("topicId", -1);
+		List<User> users = GetUserEndpoint.getUsersByTopicId(topicId, request);		
+		Map<User, Long> deltas = new HashMap<User, Long>();
+		
+		for (User user : users) {
+			WebsiteRequest deltaRequest = new WebsiteRequest(request.getServletRequest());
+			deltaRequest.addParameter("userId", String.valueOf(user.getId()));
+			
+			long delta = getDeltaBetweenActionTimestamps(deltaRequest);
+			deltas.put(user, delta);
+		}
+		
+		return deltas;
 	}
 	
 	public static long getDeltaBetweenActionTimestamps(WebsiteRequest request) throws Exception {

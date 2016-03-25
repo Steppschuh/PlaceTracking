@@ -23,8 +23,6 @@ public class WebsiteResponse {
 	}
 
 	public void send(HttpServletResponse resp) throws IOException {
-		//resp.setContentType("application/json");
-		//resp.addHeader("Access-Control-Allow-Origin", "*");
         resp.getWriter().write(content);
         resp.getWriter().flush();
         resp.getWriter().close();

@@ -7,8 +7,8 @@ import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
 import placetracking.api.endpoint.Endpoint;
 import placetracking.api.endpoint.EndpointManager;
-import placetracking.util.SlackPayload;
-import placetracking.util.SlackWebHook;
+import placetracking.util.slack.SlackPayload;
+import placetracking.util.slack.SlackWebHook;
 
 public class ReportingEndpoint extends Endpoint {
 	
@@ -32,9 +32,6 @@ public class ReportingEndpoint extends Endpoint {
 				SlackWebHook slackWebHook = new SlackWebHook(slackWebHookUrl);
 				slackWebHook.setPayload(slackPayload);
 				slackWebHook.post();
-				
-				log.info("Posting to slack: " + slackWebHookUrl);
-				log.info(slackWebHook.getPayloadAsJson());
 			}
 			
 			return response;

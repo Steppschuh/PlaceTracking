@@ -2,6 +2,7 @@
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/datastore/OfyHelper.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/ApiServlet.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/topic/GetTopicEndpoint.java
+/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/util/slack/SlackPayload.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/EndpointManager.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/RootFilter.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/AddActionEndpoint.java
@@ -13,14 +14,13 @@
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/relation/AddRelationEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/datastore/model/User.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/datastore/model/Action.java
-/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/util/SlackWebHook.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/user/GetUserEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/datastore/model/Topic.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/ApiResponse.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/reporting/ReportingEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/topic/AddTopicEndpoint.java
-/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/util/SlackPayload.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/reporting/DeltaReportingEndpoint.java
+/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/util/slack/SlackWebHook.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/GetActionEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/user/AddUserEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/WebsiteRequest.java
