@@ -7,6 +7,9 @@ import java.util.List;
 import javax.cache.Cache;
 import javax.servlet.http.HttpServletResponse;
 
+import placetracking.WebsiteRequest;
+import placetracking.util.SlackPayload;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -26,7 +29,7 @@ public class ApiResponse {
 		}
 		response = "{}";
 		try {
-			Gson gson = new GsonBuilder()
+			Gson gson = new GsonBuilder().setPrettyPrinting()
 			        //.serializeNulls()
 			        .create();
 			response = gson.toJson(this);
@@ -46,7 +49,10 @@ public class ApiResponse {
 			if (content instanceof List<?>) {
 				List contentItems = (List<Object>) content;
 				for (Object item : contentItems) {
-					sb.append(item.toString() + "\r\n");
+					if (sb.length() > 0) {
+						sb.append("\r\n");
+					}
+					sb.append(item.toString());
 				}
 			} else {
 				sb.append(content.toString());
@@ -56,6 +62,23 @@ public class ApiResponse {
 			
 		}
 		return response;
+	}
+	
+	public SlackPayload generateSlackPayload(WebsiteRequest request) {
+		SlackPayload slackPayload = new SlackPayload();
+		
+		String channel = request.getParameter("slackChannel", "#tracking");
+		slackPayload.setChannel(channel);
+		slackPayload.setUsername("Tracking API");
+		slackPayload.setIcon_emoji(":stopwatch:");
+		
+		if (asReadableResponse) {
+			slackPayload.setText(generateReadableResponse());			
+		} else {
+			slackPayload.setText(generateJsonResponse());
+		}
+		
+		return slackPayload;
 	}
 	
 	public void send(HttpServletResponse resp) throws IOException {

@@ -17,8 +17,6 @@ import placetracking.util.StringUtils;
 
 public class DeltaReportingEndpoint extends Endpoint {
 	
-	
-	
 	@Override
 	public String getEndpointPath() {
 		return EndpointManager.ENDPOINT_REPORTING_DELTA;
@@ -75,9 +73,11 @@ public class DeltaReportingEndpoint extends Endpoint {
 			long delta = getDeltaBetweenActionTimestamps(deltaRequest);
 			String readableTime = StringUtils.millisToReadableTime(delta);
 			
+			if (sb.length() > 0) {
+				sb.append("\r\n");
+			}
 			sb.append(user.getName() + ": ");
 			sb.append(readableTime);
-			sb.append("\n");
 		}
 		
 		return sb.toString();

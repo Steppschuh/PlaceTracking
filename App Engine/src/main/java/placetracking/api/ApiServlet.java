@@ -38,4 +38,10 @@ public class ApiServlet extends HttpServlet {
 		apiResponse.send(resp);
 	}
 
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// this is here for Slack integrations
+		doGet(req, resp);
+	}
+    
 }

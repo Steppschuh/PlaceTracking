@@ -7,6 +7,8 @@ import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
 import placetracking.api.endpoint.Endpoint;
 import placetracking.api.endpoint.EndpointManager;
+import placetracking.util.SlackPayload;
+import placetracking.util.SlackWebHook;
 
 public class ReportingEndpoint extends Endpoint {
 	
@@ -21,7 +23,21 @@ public class ReportingEndpoint extends Endpoint {
 	public ApiResponse processRequest(WebsiteRequest request) {
 		Endpoint endpoint = EndpointManager.getEndpointForRequest(request, endpoints);
 		if (endpoint != null) {
-			return endpoint.processRequest(request);
+			ApiResponse response = endpoint.processRequest(request);
+			
+			String slackWebHookUrl = request.getParameter("slackWebHookUrl");
+			if (slackWebHookUrl != null) {
+				SlackPayload slackPayload = response.generateSlackPayload(request);
+				
+				SlackWebHook slackWebHook = new SlackWebHook(slackWebHookUrl);
+				slackWebHook.setPayload(slackPayload);
+				slackWebHook.post();
+				
+				log.info("Posting to slack: " + slackWebHookUrl);
+				log.info(slackWebHook.getPayloadAsJson());
+			}
+			
+			return response;
 		} else {
 			return super.processRequest(request);
 		}
