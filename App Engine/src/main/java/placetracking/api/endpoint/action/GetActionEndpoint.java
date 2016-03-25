@@ -15,6 +15,8 @@ import com.googlecode.objectify.cmd.Query;
 
 public class GetActionEndpoint extends Endpoint {
 	
+	public static final int MAXIMUM_ACTIONS_COUNT = 200;
+	
 	@Override
 	public String getEndpointPath() {
 		return EndpointManager.ENDPOINT_ACTIONS_GET;
@@ -38,20 +40,26 @@ public class GetActionEndpoint extends Endpoint {
 			results = getActionsWithFilters(request);
 		}
 		
+		if (results.size() >= MAXIMUM_ACTIONS_COUNT) {
+			throw new Exception("The result exceeded the maximum actions count (" + MAXIMUM_ACTIONS_COUNT + ")," +
+					"please use the limit and offset parameter or choose a smaller time frame");
+		}
+		
 		log.info("Found " + results.size() + " action(s)");
 		return results;
 	}
 	
 	public static List<Action> getActionsWithFilters(WebsiteRequest request) throws Exception {
 		long now = (new Date()).getTime();
-
+		
 		String name = request.getParameter("name");
 		long userId = request.getParameterAsLong("userId", -1);
 		long topicId = request.getParameterAsLong("topicId", -1);
 		long minimumTimestamp = request.getParameterAsLong("minimumTimestamp", 0);
 		long maximumTimestamp = request.getParameterAsLong("maximumTimestamp", now);
 		int offset = request.getParameterAsInt("offset", 0);
-		int limit = request.getParameterAsInt("limit", 25);
+		int limit = request.getParameterAsInt("limit", MAXIMUM_ACTIONS_COUNT / 2);
+		limit = Math.min(limit, MAXIMUM_ACTIONS_COUNT);
 		
 		// make sure that no-one queries all actions that
 		// aren't related to him / his topic

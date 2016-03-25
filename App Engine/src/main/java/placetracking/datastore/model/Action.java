@@ -83,11 +83,11 @@ public class Action {
 		this.topicId = topicId;
 	}
 
-	public long getDate() {
+	public long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setDate(long timestamp) {
+	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
 

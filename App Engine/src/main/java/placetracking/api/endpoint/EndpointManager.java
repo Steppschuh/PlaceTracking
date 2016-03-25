@@ -40,6 +40,7 @@ public final class EndpointManager {
     public static final String ENDPOINT_RELATIONS_ADD = ENDPOINT_RELATIONS + "add/";
     
     public static final String ENDPOINT_REPORTING = ENDPOINT_API + "reports/";
+    public static final String ENDPOINT_REPORTING_DELTA = ENDPOINT_REPORTING + "delta/";
     
     public static final List<Endpoint> endpoints = getAvailableEndpoints();
     

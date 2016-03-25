@@ -12,6 +12,7 @@
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/AddActionEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/topic/AddTopicEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/relation/GetRelationsEndpoint.java
+/Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/reporting/DeltaReportingEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/RootServlet.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/action/GetActionEndpoint.java
 /Users/Steppschuh/Documents/Projects/PlaceTracking/App Engine/src/main/java/placetracking/api/endpoint/user/AddUserEndpoint.java
