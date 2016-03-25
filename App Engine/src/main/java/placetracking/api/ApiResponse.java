@@ -59,11 +59,12 @@ public class ApiResponse {
 	}
 	
 	public void send(HttpServletResponse resp) throws IOException {
-		resp.setContentType("application/json");
 		resp.addHeader("Access-Control-Allow-Origin", "*");
 		if (asReadableResponse) {
+			resp.setContentType("text/plain");
 			resp.getWriter().write(this.generateReadableResponse());
 		} else {
+			resp.setContentType("application/json");
 			resp.getWriter().write(this.generateJsonResponse());
 		}
         resp.getWriter().flush();

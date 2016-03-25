@@ -10,13 +10,10 @@ import placetracking.api.ApiResponse;
 import placetracking.api.endpoint.Endpoint;
 import placetracking.api.endpoint.EndpointManager;
 import placetracking.api.endpoint.action.GetActionEndpoint;
+import placetracking.api.endpoint.user.GetUserEndpoint;
 import placetracking.datastore.model.Action;
-import placetracking.datastore.model.Relation;
+import placetracking.datastore.model.User;
 import placetracking.util.StringUtils;
-
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.cmd.Query;
 
 public class DeltaReportingEndpoint extends Endpoint {
 	
@@ -41,16 +38,49 @@ public class DeltaReportingEndpoint extends Endpoint {
 		List<Object> results = new ArrayList<Object>();
 		
 		boolean readable = request.getParameterAsBoolean("readable", false);
+		boolean detailed = request.getParameterAsBoolean("detailed", false);
+		
 		long delta = getDeltaBetweenActionTimestamps(request);
 		if (readable) {
-			String response = StringUtils.millisToReadableTime(delta);
-			results.add(response);
+			String response;
+			if (detailed) {
+				response = getReadableDetailedDeltaByTopic(request);
+			} else {
+				response = getReadableDeltaByTopic(request);
+			}
 			log.info(response);
+			results.add(response);
 		} else {
 			results.add(delta);
 		}
 		
 		return results;
+	}
+	
+	public static String getReadableDeltaByTopic(WebsiteRequest request) throws Exception {
+		long delta = getDeltaBetweenActionTimestamps(request);
+		String response = StringUtils.millisToReadableTime(delta);
+		return response;
+	}
+	
+	public static String getReadableDetailedDeltaByTopic(WebsiteRequest request) throws Exception {
+		long topicId = request.getParameterAsLong("topicId", -1);
+		List<User> users = GetUserEndpoint.getUsersByTopicId(topicId, request);
+		
+		StringBuilder sb = new StringBuilder();
+		for (User user : users) {
+			WebsiteRequest deltaRequest = new WebsiteRequest(request.getServletRequest());
+			deltaRequest.addParameter("userId", String.valueOf(user.getId()));
+			
+			long delta = getDeltaBetweenActionTimestamps(deltaRequest);
+			String readableTime = StringUtils.millisToReadableTime(delta);
+			
+			sb.append(user.getName() + ": ");
+			sb.append(readableTime);
+			sb.append("\n");
+		}
+		
+		return sb.toString();
 	}
 	
 	public static long getDeltaBetweenActionTimestamps(WebsiteRequest request) throws Exception {
