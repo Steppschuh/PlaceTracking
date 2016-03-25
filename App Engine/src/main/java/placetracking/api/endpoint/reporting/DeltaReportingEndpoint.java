@@ -12,6 +12,7 @@ import placetracking.api.endpoint.EndpointManager;
 import placetracking.api.endpoint.action.GetActionEndpoint;
 import placetracking.datastore.model.Action;
 import placetracking.datastore.model.Relation;
+import placetracking.util.StringUtils;
 
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
@@ -28,17 +29,26 @@ public class DeltaReportingEndpoint extends Endpoint {
 	
 	@Override
 	public ApiResponse generateRequestResponse(WebsiteRequest request) throws Exception {
+		boolean readable = request.getParameterAsBoolean("readable", false);
 		ApiResponse response = new ApiResponse();
 		List<Object> results = getRequestResponseEntries(request);
 		response.setContent(results);
+		response.setAsReadableResponse(readable);
 		return response;
 	}
 	
 	public static List<Object> getRequestResponseEntries(WebsiteRequest request) throws Exception {		
 		List<Object> results = new ArrayList<Object>();
 		
+		boolean readable = request.getParameterAsBoolean("readable", false);
 		long delta = getDeltaBetweenActionTimestamps(request);
-		results.add(delta);
+		if (readable) {
+			String response = StringUtils.millisToReadableTime(delta);
+			results.add(response);
+			log.info(response);
+		} else {
+			results.add(delta);
+		}
 		
 		return results;
 	}

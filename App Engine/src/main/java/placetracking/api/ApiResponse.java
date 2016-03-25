@@ -2,6 +2,7 @@ package placetracking.api;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.cache.Cache;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ public class ApiResponse {
 
 	transient String response;
 	transient boolean loadedFromCache = false;
+	transient boolean asReadableResponse = false;
 	
 	public String generateJsonResponse() {
 		if (response != null && response.length() > 0) {
@@ -34,10 +36,36 @@ public class ApiResponse {
 		return response;
 	}
 	
+	public String generateReadableResponse() {
+		if (response != null && response.length() > 0) {
+			return response;
+		}
+		response = "";
+		try {
+			StringBuilder sb = new StringBuilder();
+			if (content instanceof List<?>) {
+				List contentItems = (List<Object>) content;
+				for (Object item : contentItems) {
+					sb.append(item.toString() + "\r\n");
+				}
+			} else {
+				sb.append(content.toString());
+			}
+			response = sb.toString();
+		} catch (Exception ex) {
+			
+		}
+		return response;
+	}
+	
 	public void send(HttpServletResponse resp) throws IOException {
 		resp.setContentType("application/json");
 		resp.addHeader("Access-Control-Allow-Origin", "*");
-        resp.getWriter().write(this.generateJsonResponse());
+		if (asReadableResponse) {
+			resp.getWriter().write(this.generateReadableResponse());
+		} else {
+			resp.getWriter().write(this.generateJsonResponse());
+		}
         resp.getWriter().flush();
         resp.getWriter().close();
 	}
@@ -96,5 +124,14 @@ public class ApiResponse {
 	public void setResponse(String response) {
 		this.response = response;
 	}
+
+	public boolean isReadableResponse() {
+		return asReadableResponse;
+	}
+
+	public void setAsReadableResponse(boolean asReadableResponse) {
+		this.asReadableResponse = asReadableResponse;
+	}
+	
 	
 }
