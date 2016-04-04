@@ -1,0 +1,23 @@
+<!-- Indices written at Sun, 3 Apr 2016 18:40:12 CEST -->
+
+<datastore-indexes autoGenerate="false">
+
+    <!-- Used 18 times in query history -->
+    <datastore-index kind="Action" ancestor="false" source="auto">
+        <property name="topicId" direction="asc"/>
+        <property name="timestamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Action" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="timestamp" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 10 times in query history -->
+    <datastore-index kind="Relation" ancestor="false" source="auto">
+        <property name="topicId" direction="asc"/>
+        <property name="userId" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

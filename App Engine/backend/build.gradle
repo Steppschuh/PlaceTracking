@@ -1,0 +1,42 @@
+// If you would like more information on the gradle-appengine-plugin please refer to the github page
+// https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.28'
+    }
+}
+
+repositories {
+    jcenter();
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'appengine'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.34'
+    compile 'com.google.appengine:appengine-api-1.0-sdk:1.9.34'
+    compile 'com.google.apis:google-api-services-storage:v1-rev66-1.21.0'
+    compile 'com.google.api-client:google-api-client:1.19.1'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.googlecode.objectify:objectify:5.1.12'
+    compile 'javax.servlet:servlet-api:2.5'
+    compile 'javax.cache:cache-api:1.0.0'
+
+}
+
+appengine {
+  downloadSdk = true
+  appcfg {
+    oauth2 = true
+  }
+}
