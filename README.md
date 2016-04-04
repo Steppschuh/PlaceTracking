@@ -32,7 +32,7 @@ Of course you don't want to manually call this API every time. You can automatic
 
 
 ## Available API endpoints
-All the API endpoints listed below are reachable at:
+All the [API endpoints](https://github.com/Steppschuh/PlaceTracking/tree/dev/App%20Engine/backend/src/main/java/placetracking/api/endpoint) listed below are reachable at:
 ```
 http://placetracking.appspot.com/api/
 ```
