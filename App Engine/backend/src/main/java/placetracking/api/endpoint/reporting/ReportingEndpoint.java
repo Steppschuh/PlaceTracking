@@ -28,7 +28,6 @@ public class ReportingEndpoint extends Endpoint {
 			String slackWebHookUrl = request.getParameter("slackWebHookUrl");
 			if (slackWebHookUrl != null) {
 				SlackPayload slackPayload = response.generateSlackPayload(request);
-				
 				SlackWebHook slackWebHook = new SlackWebHook(slackWebHookUrl);
 				slackWebHook.setPayload(slackPayload);
 				slackWebHook.post();
@@ -43,6 +42,7 @@ public class ReportingEndpoint extends Endpoint {
 	private static List<Endpoint> getAvailableEndpoints() {
     	List<Endpoint> endpoints = new ArrayList<Endpoint>();
     	endpoints.add(new DeltaReportingEndpoint());
+		endpoints.add(new BinReportingEndpoint());
     	return endpoints;
     }
 	

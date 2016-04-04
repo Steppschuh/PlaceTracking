@@ -2,7 +2,6 @@ package placetracking.api.endpoint.reporting;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,18 +38,19 @@ public class DeltaReportingEndpoint extends Endpoint {
 	
 	public static List<Object> getRequestResponseEntries(WebsiteRequest request) throws Exception {		
 		List<Object> results = new ArrayList<Object>();
-		
 		boolean readable = request.getParameterAsBoolean("readable", false);
 		boolean detailed = request.getParameterAsBoolean("detailed", false);
 		boolean chart = request.getParameterAsBoolean("chart", false);
-		
+
 		String response;
 		if (detailed) {
 			Map<User, Long> deltas = getDetailedDeltaByTopic(request);
 			if (readable) {
 				response = getDetailedDeltaByTopicAsReadableText(deltas);
 				results.add(response);
-			}
+			} else {
+                results.add(deltas);
+            }
 			if (chart) {
 				String chartUrl = getDetailedDeltaByTopicAsPieChartUrl(deltas);
 				results.add(chartUrl);
@@ -193,5 +193,13 @@ public class DeltaReportingEndpoint extends Endpoint {
 		
 		return delta;
 	}
+
+    public static Long getTotalDelta(List<Long> deltas) {
+        long total = 0;
+        for (Long delta : deltas) {
+            total += delta;
+        }
+        return total;
+    }
 	
 }

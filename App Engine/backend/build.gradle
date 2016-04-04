@@ -31,7 +31,6 @@ dependencies {
     compile 'com.googlecode.objectify:objectify:5.1.12'
     compile 'javax.servlet:servlet-api:2.5'
     compile 'javax.cache:cache-api:1.0.0'
-
 }
 
 appengine {
