@@ -16,6 +16,7 @@ import placetracking.api.endpoint.action.GetActionEndpoint;
 import placetracking.api.endpoint.user.GetUserEndpoint;
 import placetracking.datastore.model.Action;
 import placetracking.datastore.model.User;
+import placetracking.util.DateUtil;
 import placetracking.util.StringUtils;
 
 public class BinReportingEndpoint extends Endpoint {
@@ -154,7 +155,7 @@ public class BinReportingEndpoint extends Endpoint {
 
     public static String getDetailedBinsByTopicAsLineChartUrl(Map<User, List<Long>> bins) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append("http://chartspree.io/line.png?_style=light&_height=300px&_width=600px");
+        sb.append("http://chartspree.io/line.png?_style=light&_fill=true&_height=300px&_width=900px");
         for (Map.Entry<User, List<Long>> bin : bins.entrySet()) {
             User user = bin.getKey();
             List<Long> deltas = bin.getValue();
@@ -162,7 +163,7 @@ public class BinReportingEndpoint extends Endpoint {
             StringBuilder pb = new StringBuilder();
             pb.append(URLEncoder.encode(user.getName(), "UTF-8") + "=");
             for (int i = 0; i < deltas.size(); i++) {
-                long value = TimeUnit.MILLISECONDS.toSeconds(deltas.get(i));
+                long value = TimeUnit.MILLISECONDS.toMinutes(deltas.get(i));
                 pb.append(String.valueOf(value));
                 if (i < deltas.size() - 1) {
                     pb.append(",");
@@ -270,10 +271,21 @@ public class BinReportingEndpoint extends Endpoint {
     }
 
     public static WebsiteRequest getDefaultBinnifyRequest(WebsiteRequest request) {
-        long defaultMaximumTimestamp = (new Date()).getTime();
+        long now = (new Date()).getTime();
+
+        long defaultTimeFrame = TimeUnit.DAYS.toMillis(7);
+        long timeFrame = request.getParameterAsLong("timeFrame", defaultTimeFrame);
+
+        long defaultMaximumTimestamp;
+        if (TimeUnit.MILLISECONDS.toDays(timeFrame) > 1) {
+            defaultMaximumTimestamp = DateUtil.roundTimestampToNexDay(now);
+        } else {
+            defaultMaximumTimestamp = now;
+        }
+
         long maximumTimestamp = request.getParameterAsLong("maximumTimestamp", defaultMaximumTimestamp);
 
-        long defaultMinimumTimestamp = maximumTimestamp - TimeUnit.DAYS.toMillis(7);
+        long defaultMinimumTimestamp = maximumTimestamp - timeFrame;
         long minimumTimestamp = request.getParameterAsLong("minimumTimestamp", defaultMinimumTimestamp);
 
         long timestampDelta = maximumTimestamp - minimumTimestamp;
@@ -301,7 +313,7 @@ public class BinReportingEndpoint extends Endpoint {
             if (days >= 60) {
                 return days / 2;
             }
-            if (days >= 30) {
+            if (days >= 14) {
                 return days;
             }
             if (days >= 7) {
@@ -326,6 +338,5 @@ public class BinReportingEndpoint extends Endpoint {
             return minutes * 2;
         }
     }
-
 
 }
