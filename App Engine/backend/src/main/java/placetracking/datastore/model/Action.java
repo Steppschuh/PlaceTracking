@@ -50,7 +50,12 @@ public class Action {
 		this.topicId = topicId;
 		return this;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "name: " + name + " timestamp: " + timestamp;
+	}
+
 	public Long getId() {
 		return id;
 	}

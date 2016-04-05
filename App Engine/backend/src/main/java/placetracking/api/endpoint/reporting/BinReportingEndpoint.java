@@ -56,7 +56,7 @@ public class BinReportingEndpoint extends Endpoint {
             }
         } else {
             if (readable) {
-                response = DeltaReportingEndpoint.getDeltaByTopicAsReadableText(request);
+                response = DeltaReportingEndpoint.getTotalDeltaByTopicAsReadableText(request);
                 results.add(response);
             } else {
                 List<Long> bins = getBinsByTopic(request);
@@ -103,24 +103,30 @@ public class BinReportingEndpoint extends Endpoint {
         actionsRequest.addParameter("minimumTimestamp", String.valueOf(now - timeFrame));
         List<Action> actions = GetActionEndpoint.getActionsWithFilters(actionsRequest);
 
-        // move actions into bins
-        WebsiteRequest binsRequest = new WebsiteRequest(request.getServletRequest());
-        binsRequest.addParameter("minimumTimestamp", String.valueOf(now - timeFrame));
-        List<List<Action>> binnedActions = binnifyActions(actions, binsRequest);
-
         Map<User, List<Long>> bins = new HashMap<>();
 
         // iterate over all related users
         for (User user : users) {
+
+            // get sessions for the current user
+            WebsiteRequest binsRequest = new WebsiteRequest(request.getServletRequest());
+            binsRequest.addParameter("frameMinimumTimestamp", String.valueOf(now - timeFrame));
+            binsRequest.addParameter("userId", String.valueOf(user.getId()));
+            List<Session> sessions = DeltaReportingEndpoint.getSessions(actions, binsRequest);
+
+            // binnify sessions
+            List<List<Session>> binnedSessions = binnifySessions(sessions, binsRequest);
+
             // keep track of the delta for each bin
             List<Long> deltas = new ArrayList<>();
 
-            for (List<Action> binActions : binnedActions) {
+            for (int i = 0; i < binnedSessions.size(); i++) {
+                List<Session> binSessions = binnedSessions.get(i);
+
                 // calculate the delta for the current user in the current bin
                 WebsiteRequest deltaRequest = new WebsiteRequest(request.getServletRequest());
                 deltaRequest.addParameter("userId", String.valueOf(user.getId()));
-
-                long delta = DeltaReportingEndpoint.getDeltaBetweenActionTimestamps(binActions, deltaRequest);
+                long delta = DeltaReportingEndpoint.getTotalDeltaFromSessions(binSessions, deltaRequest);
                 deltas.add(delta);
             }
 
@@ -148,7 +154,7 @@ public class BinReportingEndpoint extends Endpoint {
 
     public static String getDetailedBinsByTopicAsLineChartUrl(Map<User, List<Long>> bins) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append("http://chartspree.io/bar.png?_style=light&_height=300px&_width=1200px");
+        sb.append("http://chartspree.io/line.png?_style=light&_height=300px&_width=600px");
         for (Map.Entry<User, List<Long>> bin : bins.entrySet()) {
             User user = bin.getKey();
             List<Long> deltas = bin.getValue();
@@ -156,7 +162,7 @@ public class BinReportingEndpoint extends Endpoint {
             StringBuilder pb = new StringBuilder();
             pb.append(URLEncoder.encode(user.getName(), "UTF-8") + "=");
             for (int i = 0; i < deltas.size(); i++) {
-                long value = TimeUnit.MILLISECONDS.toHours(deltas.get(i));
+                long value = TimeUnit.MILLISECONDS.toSeconds(deltas.get(i));
                 pb.append(String.valueOf(value));
                 if (i < deltas.size() - 1) {
                     pb.append(",");
@@ -169,18 +175,77 @@ public class BinReportingEndpoint extends Endpoint {
         return sb.toString();
     }
 
+    public static List<List<Session>> binnifySessions(List<Session> sessions, WebsiteRequest request) {
+        WebsiteRequest binnifyRequest = getDefaultBinnifyRequest(request);
+
+        long maximumTimestamp = binnifyRequest.getParameterAsLong("maximumTimestamp", -1);
+        long minimumTimestamp = binnifyRequest.getParameterAsLong("minimumTimestamp", -1);
+        long timestampDelta = binnifyRequest.getParameterAsLong("timestampDelta", -1);
+        int binCount = (int) binnifyRequest.getParameterAsLong("binCount", -1);
+        long binSize = binnifyRequest.getParameterAsLong("binSize", -1);
+
+        List<List<Session>> bins = new ArrayList<>(binCount);
+        for (int i = 0; i < binCount; i++) {
+            bins.add(new ArrayList<Session>());
+        }
+
+        for (int i = 0; i < sessions.size(); i++) {
+            Session session = sessions.get(i);
+
+            // skip out of range sessions
+            if (session.getStopTimestamp() < minimumTimestamp || session.getStartTimestamp() > maximumTimestamp) {
+                continue;
+            }
+
+            // calculate in which bin the session starts
+            long startTimestampOffset = Math.max(0, session.getStartTimestamp() - minimumTimestamp);
+            int startBinIndex = (int) Math.floor(startTimestampOffset / binSize);
+
+            // calculate in which bin the session stops
+            long stopTimestampOffset = Math.min((binCount * binSize) - 1, session.getStopTimestamp() - minimumTimestamp);
+            int stopBinIndex = (int) Math.floor(stopTimestampOffset / binSize);
+
+            if (startBinIndex == stopBinIndex) {
+                // the session doesn't overlap any bins
+                long binStartTimestamp = minimumTimestamp + (startBinIndex * binSize);
+                long binStopTimestamp = binStartTimestamp + binSize;
+
+                Session adjustedSession = getAdjustedSession(session, binStartTimestamp, binStopTimestamp);
+                bins.get(startBinIndex).add(adjustedSession);
+            } else {
+                // the session overlaps multiple bins, add a new session for every bin
+                int overlappingBins = stopBinIndex - startBinIndex;
+                for (int overlappedBinIndex = 0; overlappedBinIndex <= overlappingBins; overlappedBinIndex++) {
+                    int binIndex = startBinIndex + overlappedBinIndex;
+
+                    long binStartTimestamp = minimumTimestamp + (binIndex * binSize);
+                    long binStopTimestamp = binStartTimestamp + binSize;
+
+                    Session adjustedSession = getAdjustedSession(session, binStartTimestamp, binStopTimestamp);
+                    bins.get(binIndex).add(adjustedSession);
+                }
+            }
+        }
+
+        return bins;
+    }
+
+    public static Session getAdjustedSession(Session originalSession, long minimumTimestamp, long maximumTimestamp) {
+        Session adjustedSession = new Session(originalSession);
+        adjustedSession.setMinimumStartTimestamp(minimumTimestamp);
+        adjustedSession.setMaximumStopTimestamp(maximumTimestamp);
+        adjustedSession.calculateDelta();
+        return adjustedSession;
+    }
+
     public static List<List<Action>> binnifyActions(List<Action> actions, WebsiteRequest request) {
-        long defaultMaximumTimestamp = (new Date()).getTime();
-        long maximumTimestamp = request.getParameterAsLong("maximumTimestamp", defaultMaximumTimestamp);
+        WebsiteRequest binnifyRequest = getDefaultBinnifyRequest(request);
 
-        long defaultMinimumTimestamp = maximumTimestamp - TimeUnit.DAYS.toMillis(7);
-        long minimumTimestamp = request.getParameterAsLong("minimumTimestamp", defaultMinimumTimestamp);
-
-        long timestampDelta = maximumTimestamp - minimumTimestamp;
-        long defaultBinCount = getDefaultBinCountForDuration(timestampDelta);
-
-        int binCount = (int) request.getParameterAsLong("binCount", defaultBinCount);
-        long binSize = timestampDelta / binCount;
+        long maximumTimestamp = binnifyRequest.getParameterAsLong("maximumTimestamp", -1);
+        long minimumTimestamp = binnifyRequest.getParameterAsLong("minimumTimestamp", -1);
+        long timestampDelta = binnifyRequest.getParameterAsLong("timestampDelta", -1);
+        int binCount = (int) binnifyRequest.getParameterAsLong("binCount", -1);
+        long binSize = binnifyRequest.getParameterAsLong("binSize", -1);
 
         List<List<Action>> bins = new ArrayList<>(binCount);
         for (int i = 0; i < binCount; i++) {
@@ -198,10 +263,33 @@ public class BinReportingEndpoint extends Endpoint {
             // add action into matching bin
             long timestampOffset = action.getTimestamp() - minimumTimestamp;
             int binIndex = (int) Math.floor(timestampOffset / binSize);
-            bins.set(binIndex, actions);
+            bins.get(binIndex).add(action);
         }
 
         return bins;
+    }
+
+    public static WebsiteRequest getDefaultBinnifyRequest(WebsiteRequest request) {
+        long defaultMaximumTimestamp = (new Date()).getTime();
+        long maximumTimestamp = request.getParameterAsLong("maximumTimestamp", defaultMaximumTimestamp);
+
+        long defaultMinimumTimestamp = maximumTimestamp - TimeUnit.DAYS.toMillis(7);
+        long minimumTimestamp = request.getParameterAsLong("minimumTimestamp", defaultMinimumTimestamp);
+
+        long timestampDelta = maximumTimestamp - minimumTimestamp;
+        long defaultBinCount = getDefaultBinCountForDuration(timestampDelta);
+
+        int binCount = (int) request.getParameterAsLong("binCount", defaultBinCount);
+        long binSize = timestampDelta / binCount;
+
+        WebsiteRequest defaultRequest = new WebsiteRequest(request.getServletRequest());
+        defaultRequest.addParameter("maximumTimestamp", String.valueOf(maximumTimestamp));
+        defaultRequest.addParameter("minimumTimestamp", String.valueOf(minimumTimestamp));
+        defaultRequest.addParameter("binCount", String.valueOf(binCount));
+        defaultRequest.addParameter("binSize", String.valueOf(binSize));
+        defaultRequest.addParameter("timestampDelta", String.valueOf(timestampDelta));
+
+        return defaultRequest;
     }
 
     public static long getDefaultBinCountForDuration(long duration) {
