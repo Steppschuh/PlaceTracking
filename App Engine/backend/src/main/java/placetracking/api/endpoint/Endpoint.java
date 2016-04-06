@@ -16,7 +16,7 @@ import placetracking.api.ApiResponse;
  */
 public abstract class Endpoint {
 
-	public static final Logger log = Logger.getLogger(Endpoint.class.getName());
+	public static final Logger log = Logger.getLogger(Endpoint.class.getSimpleName());
 	
 	/**
 	 * Used for assigning requests to endpoints

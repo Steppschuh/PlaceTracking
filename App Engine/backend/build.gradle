@@ -26,6 +26,8 @@ dependencies {
     appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.34'
     compile 'com.google.appengine:appengine-api-1.0-sdk:1.9.34'
     compile 'com.google.apis:google-api-services-storage:v1-rev66-1.21.0'
+    compile 'com.google.apis:google-api-services-urlshortener:v1-rev43-1.21.0'
+    compile 'com.google.api-client:google-api-client-appengine:1.21.0'
     compile 'com.google.api-client:google-api-client:1.19.1'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.googlecode.objectify:objectify:5.1.12'

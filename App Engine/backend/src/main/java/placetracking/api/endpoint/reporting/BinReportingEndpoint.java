@@ -18,6 +18,7 @@ import placetracking.datastore.model.Action;
 import placetracking.datastore.model.User;
 import placetracking.util.DateUtil;
 import placetracking.util.StringUtils;
+import placetracking.util.shortener.GoogleUrlShortener;
 
 public class BinReportingEndpoint extends Endpoint {
 
@@ -53,7 +54,8 @@ public class BinReportingEndpoint extends Endpoint {
             }
             if (chart) {
                 String chartUrl = getDetailedBinsByTopicAsLineChartUrl(bins);
-                results.add(chartUrl);
+                String shortChartUrl = GoogleUrlShortener.getShortUrlAsString(chartUrl);
+                results.add(shortChartUrl);
             }
         } else {
             if (readable) {

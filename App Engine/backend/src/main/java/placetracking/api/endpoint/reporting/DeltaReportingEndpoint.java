@@ -18,6 +18,7 @@ import placetracking.datastore.model.Action;
 import placetracking.datastore.model.User;
 import placetracking.util.MapUtil;
 import placetracking.util.StringUtils;
+import placetracking.util.shortener.GoogleUrlShortener;
 
 public class DeltaReportingEndpoint extends Endpoint {
 
@@ -53,7 +54,8 @@ public class DeltaReportingEndpoint extends Endpoint {
             }
 			if (chart) {
 				String chartUrl = getDetailedTotalDeltaByTopicAsPieChartUrl(deltas);
-				results.add(chartUrl);
+                String shortChartUrl = GoogleUrlShortener.getShortUrlAsString(chartUrl);
+				results.add(shortChartUrl);
 			}
 		} else {
 			if (readable) {
