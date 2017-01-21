@@ -1,11 +1,11 @@
-# PlaceTracking
-Simple and free to use JSON API for time / location / whatever tracking. Feel free to discuss on [xda-developers](http://forum.xda-developers.com/tools/general/tool-free-time-location-tracking-api-t3341898).
+# Tracking API
+Simple and free to use JSON API for time / location / whatever tracking. Read about it on [Medium.com](https://medium.com/@Steppschuh/370c600af52b#.kchrtwitj).
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/434707094bd26e283ffc)
 
 
 ## Example Usage
-Follow [this guide](http://random-how-to.com/free-automated-time-tracking/) to learn how to set this up as automated time tracking solution.
+Follow [this guide](http://random-how-to.com/free-automated-time-tracking/) or [this article](https://medium.com/@Steppschuh/370c600af52b#.kchrtwitj) to learn how to set this up as automated time tracking solution.
 
 ### Time Tracking
 The most obvious use case is logging how much time you've spent on a project:
