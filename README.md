@@ -3,6 +3,8 @@ Simple and free to use JSON API for time / location / whatever tracking. Read ab
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/434707094bd26e283ffc)
 
+## Demo & Visualization
+You can use [this JSFiddle](http://jsfiddle.net/Steppschuh/bq8vdtgy/) to play around with the API and to visualize tracked actions. Feel free to customize it for your needs.
 
 ## Example Usage
 Follow [this guide](http://random-how-to.com/free-automated-time-tracking/) or [this article](https://medium.com/@Steppschuh/370c600af52b#.kchrtwitj) to learn how to set this up as automated time tracking solution.
