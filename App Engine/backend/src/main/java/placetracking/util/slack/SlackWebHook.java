@@ -13,42 +13,41 @@ import java.util.HashMap;
 
 public class SlackWebHook {
 
-	transient private final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-	transient private final HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
-    
-	private SlackPayload payload;
-	transient private String url;
-	
-	public SlackWebHook(String url) {
-		super();
-		this.url = url;
-	}
+    transient private final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    transient private final HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory();
 
-	public String getPayloadAsJson() {
-		Gson gson = new GsonBuilder().create();
-		return gson.toJson(payload);
-	}
-	
-	public void post() {
-		try {
-			HashMap<Object, Object> payloadToSend = Maps.newHashMap();
-	        payloadToSend.put("payload", getPayloadAsJson());
+    private SlackPayload payload;
+    transient private String url;
 
-	        requestFactory.buildPostRequest(new GenericUrl(url), new UrlEncodedContent(payloadToSend))
-	                .execute();
-	    } catch (Exception ex) {
-	        ex.printStackTrace();
-	    }
-	}
+    public SlackWebHook(String url) {
+        super();
+        this.url = url;
+    }
 
-	public SlackPayload getPayload() {
-		return payload;
-	}
+    public String getPayloadAsJson() {
+        Gson gson = new GsonBuilder().create();
+        return gson.toJson(payload);
+    }
 
-	public void setPayload(SlackPayload payload) {
-		this.payload = payload;
-	}
-	
-	
-	
+    public void post() {
+        try {
+            HashMap<Object, Object> payloadToSend = Maps.newHashMap();
+            payloadToSend.put("payload", getPayloadAsJson());
+
+            requestFactory.buildPostRequest(new GenericUrl(url), new UrlEncodedContent(payloadToSend))
+                    .execute();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public SlackPayload getPayload() {
+        return payload;
+    }
+
+    public void setPayload(SlackPayload payload) {
+        this.payload = payload;
+    }
+
+
 }

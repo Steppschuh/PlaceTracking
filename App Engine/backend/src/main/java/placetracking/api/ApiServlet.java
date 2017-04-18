@@ -17,31 +17,31 @@ public class ApiServlet extends HttpServlet {
     private static final Logger log = Logger.getLogger(ApiServlet.class.getSimpleName());
 
     @Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		WebsiteRequest apiRequest = new WebsiteRequest(req);
-		ApiResponse apiResponse = new ApiResponse();
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        WebsiteRequest apiRequest = new WebsiteRequest(req);
+        ApiResponse apiResponse = new ApiResponse();
 
-		try {			
-			// Find an endpoint that can handle the request
-			Endpoint endpoint = EndpointManager.getEndpointForRequest(apiRequest);
-			if (endpoint == null) {
-				throw new Exception("Unknown endpoint called");
-			}
-			
-			// Process the request
-			apiResponse = endpoint.processRequest(apiRequest);
-		} catch (Exception e) {
-			log.severe(e.getMessage());
-			apiResponse.setException(e);
-		}
+        try {
+            // Find an endpoint that can handle the request
+            Endpoint endpoint = EndpointManager.getEndpointForRequest(apiRequest);
+            if (endpoint == null) {
+                throw new Exception("Unknown endpoint called");
+            }
 
-		apiResponse.send(resp);
-	}
+            // Process the request
+            apiResponse = endpoint.processRequest(apiRequest);
+        } catch (Exception e) {
+            log.severe(e.getMessage());
+            apiResponse.setException(e);
+        }
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// this is here for Slack integrations
-		doGet(req, resp);
-	}
-    
+        apiResponse.send(resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // this is here for Slack integrations
+        doGet(req, resp);
+    }
+
 }

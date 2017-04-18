@@ -1,5 +1,7 @@
 package placetracking.datastore;
 
+import com.googlecode.objectify.ObjectifyService;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
@@ -8,11 +10,9 @@ import placetracking.datastore.model.Relation;
 import placetracking.datastore.model.Topic;
 import placetracking.datastore.model.User;
 
-import com.googlecode.objectify.ObjectifyService;
-
 public class OfyHelper implements ServletContextListener {
-	
-	public void contextInitialized(ServletContextEvent event) {
+
+    public void contextInitialized(ServletContextEvent event) {
         // This will be invoked as part of a warmup request, or the first user request if no warmup
         // request.
         ObjectifyService.register(Topic.class);

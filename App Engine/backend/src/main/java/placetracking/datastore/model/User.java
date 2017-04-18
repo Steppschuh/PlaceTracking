@@ -7,9 +7,11 @@ import com.googlecode.objectify.annotation.Index;
 @Entity
 public class User {
 
-    @Id private Long id;
+    @Id
+    private Long id;
 
-    @Index private String name;
+    @Index
+    private String name;
 
     public User() {
     }
@@ -19,25 +21,25 @@ public class User {
         this.name = name;
     }
 
-	@Override
-	public String toString() {
-		return name;
-	}
+    @Override
+    public String toString() {
+        return name;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
 }
