@@ -22,14 +22,13 @@ public class ApiServlet extends HttpServlet {
     private static final Pattern apiVersionPattern = Pattern.compile(".*(/api/v)(\\d)+(/).*");
     private static final Pattern domainVersionPattern = Pattern.compile(".*(://)(\\d)+(-dot-).*");
 
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        WebsiteRequest apiRequest = new WebsiteRequest(req);
+    private static void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        WebsiteRequest apiRequest = new WebsiteRequest(request);
         ApiResponse apiResponse = new ApiResponse();
 
         try {
             // Redirect API calls with invalid or old version codes
-            redirectLegacyApiCalls(apiRequest, resp);
+            redirectLegacyApiCalls(apiRequest, response);
 
             // Find an endpoint that can handle the request
             Endpoint endpoint = EndpointManager.getEndpointForRequest(apiRequest);
@@ -45,36 +44,49 @@ public class ApiServlet extends HttpServlet {
             apiResponse.setException(e);
         }
 
-        apiResponse.send(resp);
+        apiResponse.send(response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        handleRequest(request, response);
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRequest(request, response);
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRequest(request, response);
     }
 
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        handleRequest(request, response);
+    }
+
+    /**
+     * Redirects API requests to the latest supported legacy version in case that
+     * the requested API version is too old or not specified.
+     *
+     * Won't redirect requests against the dev server.
+     */
     private static void redirectLegacyApiCalls(WebsiteRequest apiRequest, HttpServletResponse response) throws IOException {
         if (apiRequest.getUrl().contains(EndpointManager.HOST_LOCAL_DEV_SERVER)) {
             return;
         }
         int versionCode = extractDomainVersionCode(apiRequest.getUrl());
         if (versionCode < MINIMUM_VERSION_CODE) {
-            // redirect to latest legacy version
             String redirectUrl = replaceDomainVersionCode(apiRequest.getFullUrl(), MINIMUM_VERSION_CODE - 1);
             response.sendRedirect(redirectUrl);
         }
     }
 
+    /**
+     * Given a url like "http://placetracking.appspot.com/api/v3/users/", it will return 3.
+     */
     private static int extractApiVersionCode(String requestUrl) {
         int version = MINIMUM_VERSION_CODE - 1;
         try {
@@ -100,6 +112,9 @@ public class ApiServlet extends HttpServlet {
         return requestUrl.replace(target, replacement);
     }
 
+    /**
+     * Given a url like "http://3-dot-placetracking.appspot.com/api/users/", it will return 3.
+     */
     private static int extractDomainVersionCode(String requestUrl) {
         int version = MINIMUM_VERSION_CODE - 1;
         try {
@@ -113,7 +128,7 @@ public class ApiServlet extends HttpServlet {
         }
         return version;
     }
-
+    
     private static String replaceDomainVersionCode(String requestUrl, int targetVersionCode) {
         Matcher matcher = domainVersionPattern.matcher(requestUrl);
         String target = "://";
