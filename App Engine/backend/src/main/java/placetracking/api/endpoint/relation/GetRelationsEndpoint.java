@@ -5,6 +5,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
 
 import java.util.List;
+import java.util.Set;
 
 import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
@@ -16,7 +17,12 @@ public class GetRelationsEndpoint extends Endpoint {
 
     @Override
     public String getEndpointPath() {
-        return EndpointManager.ENDPOINT_RELATIONS_GET;
+        return EndpointManager.ENDPOINT_RELATIONS;
+    }
+
+    @Override
+    public Set<String> getEndpointMethods() {
+        return Endpoint.METHOD_GET;
     }
 
     @Override
