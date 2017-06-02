@@ -5,6 +5,7 @@ import com.googlecode.objectify.ObjectifyService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
@@ -18,7 +19,12 @@ public class GetUserEndpoint extends Endpoint {
 
     @Override
     public String getEndpointPath() {
-        return EndpointManager.ENDPOINT_USERS_GET;
+        return EndpointManager.ENDPOINT_USERS;
+    }
+
+    @Override
+    public Set<String> getEndpointMethods() {
+        return Endpoint.METHOD_GET;
     }
 
     @Override
