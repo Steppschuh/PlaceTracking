@@ -17,29 +17,29 @@ import placetracking.api.endpoint.user.GetUserEndpoint;
 
 public final class EndpointManager {
 
-    public static final String HOST_LOCAL_DEV_SERVER = "localhost:8888";
+    public static final String HOST_LOCAL_DEV_SERVER = "localhost:8080";
     public static final String HOST_APP_ENGINE = "placetracking.appspot.com";
 
     public static final String ENDPOINT_API = "api/";
 
-    public static final String ENDPOINT_TOPICS = ENDPOINT_API + "topics/";
+    public static final String ENDPOINT_TOPICS = "topics/";
     public static final String ENDPOINT_TOPICS_GET = ENDPOINT_TOPICS + "get/";
     public static final String ENDPOINT_TOPICS_ADD = ENDPOINT_TOPICS + "add/";
 
-    public static final String ENDPOINT_USERS = ENDPOINT_API + "users/";
+    public static final String ENDPOINT_USERS = "users/";
     public static final String ENDPOINT_USERS_GET = ENDPOINT_USERS + "get/";
     public static final String ENDPOINT_USERS_ADD = ENDPOINT_USERS + "add/";
 
-    public static final String ENDPOINT_ACTIONS = ENDPOINT_API + "actions/";
+    public static final String ENDPOINT_ACTIONS = "actions/";
     public static final String ENDPOINT_ACTIONS_GET = ENDPOINT_ACTIONS + "get/";
     public static final String ENDPOINT_ACTIONS_ADD = ENDPOINT_ACTIONS + "add/";
     public static final String ENDPOINT_ACTIONS_DELETE = ENDPOINT_ACTIONS + "delete/";
 
-    public static final String ENDPOINT_RELATIONS = ENDPOINT_API + "relations/";
+    public static final String ENDPOINT_RELATIONS = "relations/";
     public static final String ENDPOINT_RELATIONS_GET = ENDPOINT_RELATIONS + "get/";
     public static final String ENDPOINT_RELATIONS_ADD = ENDPOINT_RELATIONS + "add/";
 
-    public static final String ENDPOINT_REPORTING = ENDPOINT_API + "reports/";
+    public static final String ENDPOINT_REPORTING = "reports/";
     public static final String ENDPOINT_REPORTING_DELTA = ENDPOINT_REPORTING + "delta/";
     public static final String ENDPOINT_REPORTING_BINS = ENDPOINT_REPORTING + "bins/";
 

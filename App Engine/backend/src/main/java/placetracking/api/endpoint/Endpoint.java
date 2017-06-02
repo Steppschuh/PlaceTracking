@@ -3,6 +3,8 @@ package placetracking.api.endpoint;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +23,11 @@ public abstract class Endpoint {
 
     public static final Logger log = Logger.getLogger(Endpoint.class.getSimpleName());
 
+    protected static final Set<String> METHOD_GET = new HashSet<>(Collections.singletonList(HTTPMethod.GET.name().toLowerCase()));
+    protected static final Set<String> METHOD_POST = new HashSet<>(Collections.singletonList(HTTPMethod.POST.name().toLowerCase()));
+    protected static final Set<String> METHOD_PUT = new HashSet<>(Collections.singletonList(HTTPMethod.PUT.name().toLowerCase()));
+    protected static final Set<String> METHOD_DELETE = new HashSet<>(Collections.singletonList(HTTPMethod.DELETE.name().toLowerCase()));
+
     /**
      * Used for assigning requests to endpoints
      */
@@ -32,9 +39,7 @@ public abstract class Endpoint {
      * Returns a set of {@link HTTPMethod} names that the endpoint can handle.
      */
     public Set<String> getEndpointMethods() {
-        Set<String> methods = new HashSet<>();
-        methods.add(HTTPMethod.GET.name());
-        return methods;
+        return METHOD_GET;
     }
 
     /**
@@ -42,8 +47,7 @@ public abstract class Endpoint {
      */
     public boolean shouldHandleRequest(WebsiteRequest request) {
         // check request method
-        String method = request.getMethod();
-        if (!getEndpointMethods().contains(method)) {
+        if (!getEndpointMethods().contains(request.getMethod())) {
             return false;
         }
         // check request path

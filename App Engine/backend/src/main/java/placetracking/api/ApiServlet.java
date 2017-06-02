@@ -64,7 +64,7 @@ public class ApiServlet extends HttpServlet {
     }
 
     private static void redirectLegacyApiCalls(WebsiteRequest apiRequest, HttpServletResponse response) throws IOException {
-        if (apiRequest.getUrl().contains("localhost")) {
+        if (apiRequest.getUrl().contains(EndpointManager.HOST_LOCAL_DEV_SERVER)) {
             return;
         }
         int versionCode = extractDomainVersionCode(apiRequest.getUrl());
