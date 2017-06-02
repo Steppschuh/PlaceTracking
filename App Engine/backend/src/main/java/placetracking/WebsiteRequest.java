@@ -169,6 +169,10 @@ public class WebsiteRequest {
         return servletRequest.getRequestURL().toString();
     }
 
+    public String getMethod() {
+        return getServletRequest().getMethod().toLowerCase();
+    }
+
     public String getUri() {
         return servletRequest.getRequestURI();
     }

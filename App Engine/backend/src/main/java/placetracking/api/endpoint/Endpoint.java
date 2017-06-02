@@ -1,7 +1,11 @@
 package placetracking.api.endpoint;
 
+import com.google.appengine.api.urlfetch.HTTPMethod;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,9 +29,24 @@ public abstract class Endpoint {
     }
 
     /**
-     * Checks if the requested URL can be handled by an endpoint
+     * Returns a set of {@link HTTPMethod} names that the endpoint can handle.
+     */
+    public Set<String> getEndpointMethods() {
+        Set<String> methods = new HashSet<>();
+        methods.add(HTTPMethod.GET.name());
+        return methods;
+    }
+
+    /**
+     * Checks if the requested URL can be handled by the endpoint.
      */
     public boolean shouldHandleRequest(WebsiteRequest request) {
+        // check request method
+        String method = request.getMethod();
+        if (!getEndpointMethods().contains(method)) {
+            return false;
+        }
+        // check request path
         if (request.getUrl().contains(getEndpointPath())) {
             return true;
         }
@@ -86,7 +105,7 @@ public abstract class Endpoint {
      * Overwrite this to do the endpoint specific work and return some @ApiResponse object
      */
     public ApiResponse generateRequestResponse(WebsiteRequest request) throws Exception {
-        throw new Exception("Endpoint not implemenetd");
+        throw new Exception("Endpoint not implemented");
     }
 
 }
