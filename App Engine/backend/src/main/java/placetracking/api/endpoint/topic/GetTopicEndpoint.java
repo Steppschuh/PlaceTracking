@@ -4,6 +4,7 @@ import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 
 import java.util.List;
+import java.util.Set;
 
 import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
@@ -15,7 +16,12 @@ public class GetTopicEndpoint extends Endpoint {
 
     @Override
     public String getEndpointPath() {
-        return EndpointManager.ENDPOINT_TOPICS_GET;
+        return EndpointManager.ENDPOINT_TOPICS;
+    }
+
+    @Override
+    public Set<String> getEndpointMethods() {
+        return Endpoint.METHOD_GET;
     }
 
     @Override
