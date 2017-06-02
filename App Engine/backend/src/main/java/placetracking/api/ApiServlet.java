@@ -85,7 +85,7 @@ public class ApiServlet extends HttpServlet {
     }
 
     /**
-     * Given a url like "http://placetracking.appspot.com/api/v3/users/", it will return 3.
+     * Given an url like "http://placetracking.appspot.com/api/v3/users/", it will return 3.
      */
     private static int extractApiVersionCode(String requestUrl) {
         int version = MINIMUM_VERSION_CODE - 1;
@@ -113,7 +113,7 @@ public class ApiServlet extends HttpServlet {
     }
 
     /**
-     * Given a url like "http://3-dot-placetracking.appspot.com/api/users/", it will return 3.
+     * Given an url like "http://3-dot-placetracking.appspot.com/api/users/", it will return 3.
      */
     private static int extractDomainVersionCode(String requestUrl) {
         int version = MINIMUM_VERSION_CODE - 1;
@@ -128,7 +128,7 @@ public class ApiServlet extends HttpServlet {
         }
         return version;
     }
-    
+
     private static String replaceDomainVersionCode(String requestUrl, int targetVersionCode) {
         Matcher matcher = domainVersionPattern.matcher(requestUrl);
         String target = "://";

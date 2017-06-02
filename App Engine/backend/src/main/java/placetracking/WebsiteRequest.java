@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,12 +21,12 @@ public class WebsiteRequest {
 
     private static final Logger log = Logger.getLogger(WebsiteRequest.class.getName());
 
-    HttpServletRequest servletRequest;
-    String fullUrl;
-    String rootUrl;
-    String body;
-    JsonObject jsonBody;
-    Map<String, String> parameter = new HashMap<String, String>();
+    private HttpServletRequest servletRequest;
+    private String fullUrl;
+    private String rootUrl;
+    private String body;
+    private JsonObject jsonBody;
+    private Map<String, String> parameter = new HashMap<String, String>();
 
     public WebsiteRequest(HttpServletRequest req) {
         servletRequest = req;
@@ -121,7 +120,7 @@ public class WebsiteRequest {
         }
     }
 
-    public static String readBodyFromRequest(HttpServletRequest req) {
+    private static String readBodyFromRequest(HttpServletRequest req) {
         try {
             Scanner s = new Scanner(req.getInputStream(), "UTF-8").useDelimiter("\\A");
             return s.hasNext() ? s.next() : "";
@@ -134,35 +133,32 @@ public class WebsiteRequest {
     /*
      * URL helper
      */
-    public static String getRootUrlFromRequest(HttpServletRequest req) {
+    private static String getRootUrlFromRequest(HttpServletRequest req) {
         String requestUrl = req.getRequestURL().toString();
         return requestUrl.substring(0, requestUrl.indexOf(req.getRequestURI())) + "/";
     }
 
-    public List<String> getSeperatedPath() {
-        return getSeperatedPathFromRequest(servletRequest);
-    }
-
-    public List<String> getSeperatedPathStartingAt(String path) {
-        List<String> paths = getSeperatedPathFromRequest(servletRequest);
+    private List<String> getSeparatedPathStartingAt(String path) {
+        List<String> paths = getSeparatedPathFromRequest(servletRequest);
         return paths.subList(paths.indexOf(path) + 1, paths.size());
     }
 
-    public static List<String> getSeperatedPathFromRequest(HttpServletRequest req) {
-        List<String> paths = Arrays.asList(req.getRequestURI().split("/"));
-        return paths;
+    private static List<String> getSeparatedPathFromRequest(HttpServletRequest req) {
+        return Arrays.asList(req.getRequestURI().split("/"));
     }
 
-    public static String getFullUrlFromRequest(HttpServletRequest req) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(req.getRequestURL().toString() + "?");
+    private static String getFullUrlFromRequest(HttpServletRequest request) {
+        StringBuilder builder = new StringBuilder()
+                .append(request.getRequestURL().toString())
+                .append("?");
 
-        Iterator entries = req.getParameterMap().entrySet().iterator();
-        while (entries.hasNext()) {
-            Entry thisEntry = (Entry) entries.next();
-            String key = (String) thisEntry.getKey();
-            String value = ((String[]) thisEntry.getValue())[0];
-            builder.append(key + "=" + value + "&");
+        for (Object parameter : request.getParameterMap().entrySet()) {
+            Entry entry = (Entry) parameter;
+            String key = (String) entry.getKey();
+            String value = ((String[]) entry.getValue())[0];
+            if (!key.equals("offset")) {
+                builder.append(key).append("=").append(value).append("&");
+            }
         }
 
         String url = builder.toString();
@@ -171,22 +167,22 @@ public class WebsiteRequest {
     }
 
     public String getNextFullUrlFromRequest() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(servletRequest.getRequestURL().toString() + "?");
+        StringBuilder builder = new StringBuilder()
+                .append(servletRequest.getRequestURL().toString())
+                .append("?");
 
         int offset = getParameterAsInt("offset", 0);
         int count = getParameterAsInt("count", 25);
         int nextOffset = offset + count;
 
-        builder.append("offset=" + nextOffset + "&");
+        builder.append("offset=").append(nextOffset).append("&");
 
-        Iterator entries = servletRequest.getParameterMap().entrySet().iterator();
-        while (entries.hasNext()) {
-            Entry thisEntry = (Entry) entries.next();
-            String key = (String) thisEntry.getKey();
-            String value = ((String[]) thisEntry.getValue())[0];
+        for (Object parameter : servletRequest.getParameterMap().entrySet()) {
+            Entry entry = (Entry) parameter;
+            String key = (String) entry.getKey();
+            String value = ((String[]) entry.getValue())[0];
             if (!key.equals("offset")) {
-                builder.append(key + "=" + value + "&");
+                builder.append(key).append("=").append(value).append("&");
             }
         }
 
@@ -197,7 +193,7 @@ public class WebsiteRequest {
 
     public String extractQueryFromPath(String sitePath) throws Exception {
         String query = "";
-        List<String> paths = getSeperatedPathStartingAt(sitePath);
+        List<String> paths = getSeparatedPathStartingAt(sitePath);
         if (paths.size() > 0) {
             query = paths.get(0);
             query = URLDecoder.decode(query, "UTF-8");
