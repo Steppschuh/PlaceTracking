@@ -30,7 +30,7 @@ public final class EndpointManager {
     public static final String ENDPOINT_REPORTING_DELTA = ENDPOINT_REPORTING + "delta/";
     public static final String ENDPOINT_REPORTING_BINS = ENDPOINT_REPORTING + "bins/";
 
-    public static final List<Endpoint> endpoints = getAvailableEndpoints();
+    private static final List<Endpoint> endpoints = getAvailableEndpoints();
 
     private EndpointManager() {
     }

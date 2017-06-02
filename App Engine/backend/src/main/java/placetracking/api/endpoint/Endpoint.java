@@ -3,7 +3,6 @@ package placetracking.api.endpoint;
 import com.google.appengine.api.urlfetch.HTTPMethod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,8 @@ public abstract class Endpoint {
     protected static final Set<String> METHOD_DELETE = new HashSet<>(Collections.singletonList(HTTPMethod.DELETE.name().toLowerCase()));
 
     /**
-     * Used for assigning requests to endpoints
+     * Returns the path of this endpoint. Used to decide which endpoints are capable of handling a request.
+     * Note that there can be multiple endpoints available for the same path (e.g. 2 for GET and POST requests).
      */
     public String getEndpointPath() {
         return EndpointManager.ENDPOINT_API;
@@ -58,8 +58,8 @@ public abstract class Endpoint {
     }
 
     /**
-     * Main method for actually handling an request. Avoid overwriting this,
-     * use @generateRequestResponse() instead
+     * Main method for actually handling a request. Avoid overwriting this,
+     * use {@link #generateRequestResponse(WebsiteRequest)} instead.
      */
     public ApiResponse processRequest(WebsiteRequest request) {
         ApiResponse response = new ApiResponse();
@@ -88,10 +88,10 @@ public abstract class Endpoint {
 
     /**
      * Overwrite if the endpoint requires some mandatory parameters to be set.
-     * An exception will be thrown if one of the parameters is not set
+     * An exception will be thrown if one of the parameters is not set.
      */
     public List<String> getRequiredParameters(WebsiteRequest request) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
     /**

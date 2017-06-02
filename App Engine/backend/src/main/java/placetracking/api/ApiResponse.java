@@ -94,11 +94,7 @@ public class ApiResponse {
 
     public void setException(Exception exception) {
         if (exception != null) {
-            if (exception.getMessage() != null) {
-                statusMessage = exception.getMessage();
-            } else {
-                statusMessage = exception.toString();
-            }
+            statusMessage = exception.toString();
         } else {
             statusMessage = "Unknown internal server error";
         }
