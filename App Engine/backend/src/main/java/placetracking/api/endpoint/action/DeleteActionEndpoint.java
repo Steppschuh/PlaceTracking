@@ -5,6 +5,7 @@ import com.googlecode.objectify.ObjectifyService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
@@ -16,7 +17,12 @@ public class DeleteActionEndpoint extends Endpoint {
 
     @Override
     public String getEndpointPath() {
-        return EndpointManager.ENDPOINT_ACTIONS_DELETE;
+        return EndpointManager.ENDPOINT_ACTIONS;
+    }
+
+    @Override
+    public Set<String> getEndpointMethods() {
+        return Endpoint.METHOD_DELETE;
     }
 
     @Override

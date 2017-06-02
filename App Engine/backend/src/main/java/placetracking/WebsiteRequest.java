@@ -1,5 +1,11 @@
 package placetracking;
 
+import com.google.appengine.api.urlfetch.HTTPMethod;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,12 +25,40 @@ public class WebsiteRequest {
     HttpServletRequest servletRequest;
     String fullUrl;
     String rootUrl;
+    String body;
+    JsonObject jsonBody;
     Map<String, String> parameter = new HashMap<String, String>();
 
     public WebsiteRequest(HttpServletRequest req) {
         servletRequest = req;
+        processRequestBody();
         fullUrl = getFullUrlFromRequest(req);
         rootUrl = getRootUrlFromRequest(req);
+    }
+
+    private void processRequestBody() {
+        if (getMethod().equalsIgnoreCase(HTTPMethod.GET.name())) {
+            return;
+        }
+
+        body = readBodyFromRequest(servletRequest);
+        if (body == null || body.length() < 1) {
+            return;
+        }
+
+        try {
+            JsonParser jsonParser = new JsonParser();
+            jsonBody = (JsonObject) jsonParser.parse(body);
+
+            // add primitives from json body as request parameters
+            for (Entry<String, JsonElement> jsonElementEntry : jsonBody.entrySet()) {
+                if (jsonElementEntry.getValue().isJsonPrimitive()) {
+                    addParameter(jsonElementEntry.getKey(), jsonElementEntry.getValue().getAsString());
+                }
+            }
+        } catch (Exception e) {
+            log.warning("Unable to process request body: " + e.getMessage());
+        }
     }
 
     public void setAttribute(String key, Object value) {
@@ -84,6 +119,16 @@ public class WebsiteRequest {
         } catch (Exception ex) {
             return defaultValue;
         }
+    }
+
+    public static String readBodyFromRequest(HttpServletRequest req) {
+        try {
+            Scanner s = new Scanner(req.getInputStream(), "UTF-8").useDelimiter("\\A");
+            return s.hasNext() ? s.next() : "";
+        } catch (IOException e) {
+            log.warning("Unable to read request body: " + e.getMessage());
+        }
+        return "";
     }
 
     /*
@@ -199,6 +244,14 @@ public class WebsiteRequest {
 
     public String getRootUrl() {
         return rootUrl;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public JsonObject getJsonBody() {
+        return jsonBody;
     }
 
 }

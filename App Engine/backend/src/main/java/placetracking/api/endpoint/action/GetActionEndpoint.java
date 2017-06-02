@@ -6,6 +6,7 @@ import com.googlecode.objectify.cmd.Query;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import placetracking.WebsiteRequest;
 import placetracking.api.ApiResponse;
@@ -19,7 +20,12 @@ public class GetActionEndpoint extends Endpoint {
 
     @Override
     public String getEndpointPath() {
-        return EndpointManager.ENDPOINT_ACTIONS_GET;
+        return EndpointManager.ENDPOINT_ACTIONS;
+    }
+
+    @Override
+    public Set<String> getEndpointMethods() {
+        return Endpoint.METHOD_GET;
     }
 
     @Override
