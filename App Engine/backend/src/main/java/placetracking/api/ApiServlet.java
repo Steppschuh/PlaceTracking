@@ -77,7 +77,9 @@ public class ApiServlet extends HttpServlet {
         if (apiRequest.getUrl().contains(EndpointManager.HOST_LOCAL_DEV_SERVER)) {
             return;
         }
-        int versionCode = extractDomainVersionCode(apiRequest.getUrl());
+        int domainVersionCode = extractDomainVersionCode(apiRequest.getUrl());
+        int apiVersionCode = extractApiVersionCode(apiRequest.getUrl());
+        int versionCode = Math.max(domainVersionCode, apiVersionCode);
         if (versionCode < MINIMUM_VERSION_CODE) {
             String redirectUrl = replaceDomainVersionCode(apiRequest.getFullUrl(), MINIMUM_VERSION_CODE - 1);
             response.sendRedirect(redirectUrl);
