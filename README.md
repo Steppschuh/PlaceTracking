@@ -53,7 +53,7 @@ Make sure that you store the **id** of the returned user object, you will need i
 ### Topics
 #### Adding a topic
 A topic is anything that you want to track, like time spent on a project or when you arrive at a place. You can create a new topic by providing a **name**:
-```
+```Shell
 curl -X POST \
   https://placetracking.appspot.com/api/v3/topics/ \
   -d '{
