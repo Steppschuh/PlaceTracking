@@ -35,7 +35,7 @@ Of course you don't want to manually call this API every time. You can automatic
 ## Available API endpoints
 All the [API endpoints](https://github.com/Steppschuh/PlaceTracking/tree/dev/App%20Engine/backend/src/main/java/placetracking/api/endpoint) listed below are reachable at:
 ```
-http://placetracking.appspot.com/api/
+https://placetracking.appspot.com/api/v3/
 ```
 
 ### Users
@@ -67,7 +67,7 @@ Make sure that you store the **id** of the returned topic object, you will need 
 An action can bee seen as an event or indicator for a topic. You can create a new action by providing a **name**, your **userId** and a **topicId**:
 ```Shell
 curl -X POST \
-  http://localhost:8080/api/actions/ \
+  https://placetracking.appspot.com/api/v3/actions/ \
   -d '{
   "userId": 5629499534213120,
   "topicId": 5910974510923776,
@@ -83,7 +83,7 @@ In addition to these 3 parameters, the API will also store the current **timesta
 If you messed up for some reason, you just need to pass the action **id** to this endpoint:
 ```Shell
 curl -X DELETE \
-  'http://localhost:8080/api/actions/' \
+  https://placetracking.appspot.com/api/v3/actions/ \
   -d '{
   "id": 5965499534513120
 }'
