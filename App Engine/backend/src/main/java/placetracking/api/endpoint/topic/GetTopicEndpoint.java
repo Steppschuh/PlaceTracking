@@ -49,12 +49,12 @@ public class GetTopicEndpoint extends Endpoint {
 
     public static List<Topic> getTopicsByName(String name, WebsiteRequest request) {
         int offset = request.getParameterAsInt("offset", 0);
-        int limit = request.getParameterAsInt("limit", 25);
+        int count = request.getParameterAsInt("count", 25);
 
         List<Topic> results = ObjectifyService.ofy()
                 .load()
                 .type(Topic.class)
-                .limit(limit)
+                .limit(count)
                 .offset(offset)
                 .filter("name", name)
                 .list();

@@ -64,8 +64,8 @@ public class GetActionEndpoint extends Endpoint {
         long minimumTimestamp = request.getParameterAsLong("minimumTimestamp", 0);
         long maximumTimestamp = request.getParameterAsLong("maximumTimestamp", now);
         int offset = request.getParameterAsInt("offset", 0);
-        int limit = request.getParameterAsInt("limit", MAXIMUM_ACTIONS_COUNT / 2);
-        limit = Math.min(limit, MAXIMUM_ACTIONS_COUNT);
+        int count = request.getParameterAsInt("count", MAXIMUM_ACTIONS_COUNT / 2);
+        count = Math.min(count, MAXIMUM_ACTIONS_COUNT);
 
         // make sure that no-one queries all actions that
         // aren't related to him / his topic
@@ -77,7 +77,7 @@ public class GetActionEndpoint extends Endpoint {
                 .load()
                 .type(Action.class)
                 .order("-timestamp")
-                .limit(limit)
+                .limit(count)
                 .offset(offset);
 
         if (name != null && name.length() > 0) {

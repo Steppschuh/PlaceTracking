@@ -51,7 +51,7 @@ public class GetRelationsEndpoint extends Endpoint {
         long userId = request.getParameterAsLong("userId", -1);
         long topicId = request.getParameterAsLong("topicId", -1);
         int offset = request.getParameterAsInt("offset", 0);
-        int limit = request.getParameterAsInt("limit", 25);
+        int count = request.getParameterAsInt("count", 25);
 
         // make sure that no-one queries all relations that
         // aren't related to him / his topic
@@ -63,7 +63,7 @@ public class GetRelationsEndpoint extends Endpoint {
                 .load()
                 .type(Relation.class)
                 .order("userId")
-                .limit(limit)
+                .limit(count)
                 .offset(offset);
 
         if (userId > -1) {

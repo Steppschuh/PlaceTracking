@@ -52,12 +52,12 @@ public class GetUserEndpoint extends Endpoint {
 
     public static List<User> getUsersByName(String name, WebsiteRequest request) {
         int offset = request.getParameterAsInt("offset", 0);
-        int limit = request.getParameterAsInt("limit", 25);
+        int count = request.getParameterAsInt("count", 25);
 
         List<User> results = ObjectifyService.ofy()
                 .load()
                 .type(User.class)
-                .limit(limit)
+                .limit(count)
                 .offset(offset)
                 .filter("name", name)
                 .list();
